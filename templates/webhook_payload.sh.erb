@@ -1,0 +1,9 @@
+#!/bin/bash
+declare -x PATH="${PATH}:/opt/puppet/bin"
+declare -x BRANCH="$1"
+# Use mcollective to deploy code to the masters
+mco r10k deploy "${BRANCH:?}" &&
+<% if @config['puppet_run'] -%>
+    # Trigger a puppet run on nodes who match that environment
+    mco puppet runonce --with-fact r10k_environment="$BRANCH"
+<% end -%>

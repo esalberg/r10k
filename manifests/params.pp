@@ -47,6 +47,7 @@ class r10k::params
   $webhook_prefix_command     = '/bin/echo example'
   $webhook_enable_ssl         = true
   $webhook_use_mcollective    = true
+  $webhook_puppet_run         = false
 
   if $::is_pe == true or $::is_pe == 'true' {
     # Puppet Enterprise specific settings

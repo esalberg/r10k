@@ -70,6 +70,12 @@ class r10k::webhook(
     }
   }
 
-
+  file { '/usr/local/bin/webhook_payload.sh':
+    owner   => $user,
+    group   => $group,
+    mode    => '0755',
+    content => template('r10k/webhook_payload.sh.erb'),
+    before  => Service['webhook'],
+  }
 
 }
