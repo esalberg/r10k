@@ -14,7 +14,7 @@
 <%= [@purgedirs].flatten.to_yaml.split("\n")[1..-1].join("\n") %>
 <% end -%>
 git:
-  provider: <% @git_provider %>
+  provider: <%= @git_provider %>
 <% if @git_provider='rugged' %>
   private_key: <%= @git_private_key %>
   username: <%= @git_username %>
