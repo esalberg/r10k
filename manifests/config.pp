@@ -18,6 +18,21 @@
 #   Default: false
 # * [*configfile_symlink*]
 #   Location of symlink that points to configfile. Default: /etc/r10k.yaml
+# * [*git_provider*]
+#   Determines how r10k interacts with Git repositories:
+#   See https://github.com/puppetlabs/r10k/blob/1.5.1/doc/git/providers.mkd
+#    - 'shellgit': shells out to the 'git' executable
+#    - 'rugged': uses libgit2
+#   Default: 'shellgit'
+# * [*git_private_key*]
+#   SSH private key to use for remote Git repositories over SSH.
+#   Only used by the 'rugged' Git provider (in r10k.yaml).
+#   Default: '/root/.ssh/id_rsa'
+# * [*git_username*]
+#   SSH username for remote Git repositories if not provided in the URL.
+#   Only used by the 'rugged' Git provider (in r10k.yaml).
+#   If not set, defaults to the current user.
+#   Default: 'git'
 #
 # === Examples
 #
@@ -58,6 +73,9 @@ class r10k::config (
   $r10k_basedir              = $r10k::params::r10k_basedir,
   $manage_configfile_symlink = $r10k::params::manage_configfile_symlink,
   $configfile_symlink        = '/etc/r10k.yaml',
+  $git_provider              = $r10k::params::git_provider,
+  $git_private_key           = $r10k::params::git_private_key,
+  $git_username              = $r10k::params::git_username,
 ) inherits r10k::params {
 
   validate_bool($manage_modulepath)

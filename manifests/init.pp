@@ -5,6 +5,9 @@ class r10k (
   $purgedirs                 = $r10k::params::r10k_purgedirs,
   $cachedir                  = $r10k::params::r10k_cache_dir,
   $configfile                = $r10k::params::r10k_config_file,
+  $git_provider              = $r10k::params::git_provider,
+  $git_private_key           = $r10k::params::git_private_key,
+  $git_username              = $r10k::params::git_username,
   $version                   = $r10k::params::version,
   $modulepath                = $r10k::params::modulepath,
   $manage_modulepath         = $r10k::params::manage_modulepath,
@@ -54,6 +57,9 @@ class r10k (
     r10k_basedir              => $r10k_basedir,
     manage_configfile_symlink => $manage_configfile_symlink,
     configfile_symlink        => $configfile_symlink,
+    git_provider              => $git_provider,
+    git_private_key           => $git_private_key,
+    git_username              => $git_username,
   }
 
   if $mcollective {

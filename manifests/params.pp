@@ -15,6 +15,9 @@ class r10k::params
   $r10k_purgedirs            = $r10k_basedir
   $manage_configfile_symlink = false
   $configfile_symlink        = '/etc/r10k.yaml'
+  $git_provider              = 'shellgit'
+  $git_private_key           = '/root/.ssh/id_rsa'
+  $git_username              = 'git'
 
   # Git configuration
   $git_server = $::settings::ca_server
