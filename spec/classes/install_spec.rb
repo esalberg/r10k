@@ -207,7 +207,7 @@ describe 'r10k::install' , :type => 'class' do
         :osfamily               => 'RedHat',
         :operatingsystemrelease => '5',
         :operatingsystem        => 'Centos',
-        :is_pe                  => '',
+        :is_pe                  => true,
         :pe_version             => '3.8.1'
       }
     end
@@ -359,5 +359,24 @@ describe 'r10k::install' , :type => 'class' do
         :install_options => ['BOGON']
       )
     }
+  end
+  context "On OpenBSD installing via packages" do
+    let :params do
+      {
+        :install_options        => '',
+        :keywords               => '',
+        :manage_ruby_dependency => 'declare',
+        :package_name           => 'ruby21-r10k',
+        :provider               => 'openbsd',
+        :version                => 'latest',
+      }
+    end
+    let :facts do
+      {
+        :osfamily               => 'OpenBSD',
+      }
+    end
+    it { should_not contain_class("git") }
+    it { should contain_package("ruby21-r10k")}
   end
 end

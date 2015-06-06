@@ -10,29 +10,14 @@
 # * [*sources*]
 #   Hash containing data sources to be used by r10k to create dynamic Puppet
 #   environments. Default: {}
-# * [*purgedirs*]
-#   An Array of directory paths to purge of any subdirectories that do not
-#   correspond to a dynamic environment managed by r10k. Default: []
 # * [*manage_configfile_symlink*]
 #   Boolean to determine if a symlink to the r10k config file is to be managed.
 #   Default: false
 # * [*configfile_symlink*]
 #   Location of symlink that points to configfile. Default: /etc/r10k.yaml
-# * [*git_provider*]
-#   Determines how r10k interacts with Git repositories:
-#   See https://github.com/puppetlabs/r10k/blob/1.5.1/doc/git/providers.mkd
-#    - 'shellgit': shells out to the 'git' executable
-#    - 'rugged': uses libgit2
-#   Default: 'shellgit'
-# * [*git_private_key*]
-#   SSH private key to use for remote Git repositories over SSH.
-#   Only used by the 'rugged' Git provider (in r10k.yaml).
-#   Default: '/root/.ssh/id_rsa'
-# * [*git_username*]
-#   SSH username for remote Git repositories if not provided in the URL.
-#   Only used by the 'rugged' Git provider (in r10k.yaml).
-#   If not set, defaults to the current user.
-#   Default: 'git'
+# * [*git*]
+#   Hash containing git configuration to be used by r10k (optional)
+#   Default: {}
 #
 # === Examples
 #
@@ -47,10 +32,6 @@
 #        'basedir' => '/some/other/basedir'
 #      },
 #    },
-#    purgedirs => [
-#      "${::settings::confdir}/environments",
-#      '/some/other/basedir',
-#    ],
 #  }
 #
 # == Documentation
@@ -68,14 +49,12 @@ class r10k::config (
   $modulepath                = undef,
   $remote                    = '',
   $sources                   = 'UNSET',
-  $purgedirs                 = [],
   $puppetconf_path           = $r10k::params::puppetconf_path,
   $r10k_basedir              = $r10k::params::r10k_basedir,
   $manage_configfile_symlink = $r10k::params::manage_configfile_symlink,
   $configfile_symlink        = '/etc/r10k.yaml',
-  $git_provider              = $r10k::params::git_provider,
-  $git_private_key           = $r10k::params::git_private_key,
-  $git_username              = $r10k::params::git_username,
+  $r10k_yaml_template        = 'r10k/r10k.yaml.erb',
+  $git                       = 'UNSET',
 ) inherits r10k::params {
 
   validate_bool($manage_modulepath)
@@ -104,13 +83,18 @@ class r10k::config (
     $source_keys = keys($r10k_sources)
   }
 
+  if $git != 'UNSET' {
+    validate_hash($git)
+    $r10k_git = $git
+  }
+
   file { 'r10k.yaml':
     ensure  => file,
     owner   => 'root',
     group   => '0',
     mode    => '0644',
     path    => $configfile,
-    content => template('r10k/r10k.yaml.erb'),
+    content => template($r10k_yaml_template),
   }
 
   if $manage_configfile_symlink_real == true {
