@@ -8,7 +8,7 @@
 <% end -%>
 <% end -%>
 <% end %>
-<% unless @r10k_git.empty? -%>
+<% unless @r10k_git.nil? -%>
 :git:
 <% @r10k_git.sort.each do |key,value| -%>
     <%=key-%>: <%=value%>
