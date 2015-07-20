@@ -146,6 +146,37 @@ describe 'r10k::webhook' , :type => 'class' do
       )
     }
   end
+  context 'Puppet Enterprise 3.7.0 on a RedHat 5 installing webhook no mco' do
+    let :params do
+      {
+        :use_mcollective => false,
+      }
+    end
+    let :facts do
+      {
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '5',
+        :operatingsystem        => 'Centos',
+        :is_pe                  => 'true',
+        :pe_version             => '3.7.0'
+      }
+    end
+    it { should contain_package('sinatra').with(
+        'ensure'   => 'installed',
+        'provider' => 'pe_gem'
+      )
+    }
+
+    it { should contain_package('sinatra').with(
+        'ensure'    => 'installed',
+        'provider'  => 'pe_gem'
+      )
+    }
+    it { should_not contain_file('peadmin-cert.pem').with(
+        'path'   => '/var/lib/peadmin/.mcollective.d/peadmin-cert.pem'
+      )
+    }
+  end
   context 'Puppet 2.7.0 FOSS on a RedHat 5 installing webhook' do
     let :facts do
       {
