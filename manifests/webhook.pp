@@ -84,7 +84,6 @@ class r10k::webhook(
     include r10k::webhook::package
   }
 
-<<<<<<< HEAD
   # Only managed this file if you are using mcollective mode
   # We don't remove it as its part of PE and this is legacy
   if $use_mcollective {
@@ -99,22 +98,6 @@ class r10k::webhook(
         mode    => '0644',
         content => file("${r10k::params::puppetconf_path}/ssl/certs/pe-internal-peadmin-mcollective-client.pem",'/dev/null'),
         notify  => Service['webhook'],
-=======
-  if $use_mcollective == true {
-    if $::is_pe == true or $::is_pe == 'true' {
-      if versioncmp($::pe_version, '3.7.0') >= 0 {
-        # 3.7 does not place the certificate in peadmin's ~
-        # This places it there as if it was an upgrade
-        file { 'peadmin-cert.pem':
-          ensure  => 'file',
-          path    => '/var/lib/peadmin/.mcollective.d/peadmin-cert.pem',
-          owner   => 'peadmin',
-          group   => 'peadmin',
-          mode    => '0644',
-          content => file('/etc/puppetlabs/puppet/ssl/certs/pe-internal-peadmin-mcollective-client.pem','/dev/null'),
-          notify  => Service['webhook'],
-        }
->>>>>>> Update for PE non-masters (razor)
       }
     }
   }
